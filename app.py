@@ -68,7 +68,7 @@ def sign_up():
             auth = Authentication.sign_up_user(full_name, email, password)
 
             if not auth["success"]:
-                flash(auth["message"], "error")
+                flash(auth["message"], "danger")
                 return redirect(url_for("sign_up"))
 
             flash(auth["message"], "success")
