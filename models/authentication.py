@@ -56,4 +56,4 @@ class Authentication:
             }
 
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": "Gagal untuk mendaftar."}
