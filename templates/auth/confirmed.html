@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Verifikasi Email Berhasil</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Jua&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+      body {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        font-family: "Hind";
+      }
+      .verification-card {
+        max-width: 450px;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .success-icon {
+        font-size: 4rem;
+        color: #198754;
+        margin-bottom: 20px;
+      }
+      .btn-success {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+      h1 {
+        font-weight: 700;
+        color: #343a40;
+      }
+    </style>
+  </head>
+
+  <body
+    class="d-flex flex-column align-items-center justify-content-center p-4"
+  >
+    <div class="card verification-card">
+      <div class="card-body text-center">
+        <i class="bi bi-check-circle-fill success-icon"></i>
+
+        <h1>Verifikasi Email Berhasil!</h1>
+
+        <p class="text-muted mt-3 mb-4">
+          Selamat! Email Anda telah berhasil diverifikasi. Silakan klik tombol
+          di bawah untuk masuk ke akun Anda.
+        </p>
+
+        <a href="{{ url_for('sign_in') }}" class="btn btn-success w-100"
+          >Lanjutkan ke Halaman Login</a
+        >
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

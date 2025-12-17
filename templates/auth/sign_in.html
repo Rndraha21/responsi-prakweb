@@ -1,0 +1,66 @@
+{% extends 'auth/auth_template.html' %} {% block title %} Login {% endblock %}
+{% block content %}
+<div
+  id="form-container"
+  class="col-12 col-md-8 col-lg-6 col-xl-4 p-4 rounded shadow-lg"
+>
+  <!-- Variable pesan error dari flask wtf -->
+  {% macro showerror(field)%} {% if field.errors %} {% for err in field.errors
+  %}
+  <span
+    class="d-flex gap-2 align-items-center mt-2 text-danger"
+    style="font-size: 14px"
+    ><i class="bi bi-info-circle"></i>{{ err }}</span
+  >
+  {% endfor %} {% endif %} {% endmacro %}
+
+  <form action="{{ url_for('sign_in') }}" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="text-center mb-4">
+      <h3 class="fw-bold">Sign In</h3>
+      <p>Login ke akun Anda</p>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, msg in messages %}
+    <div
+      class="alert alert-dismissible fade show alert-{{ category }}"
+      role="alert"
+    >
+      {{ msg }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+
+    <div class="mb-3">
+      <label class="form-label" for="email">Email</label>
+      {{ form.email() }} {{ showerror(form.email) }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="password">Password</label>
+      <div class="position-relative">
+        {{ form.password() }} {{ showerror(form.password) }}
+        <img
+          id="toggle-visibility"
+          src="/icons/visible.svg"
+          alt="show"
+          class="position-absolute top-0 end-0 text-dark hidden"
+        />
+      </div>
+    </div>
+    <div class="mb-2 mt-4">
+      Belum punya akun? <a href="{{ url_for('sign_up') }}">Daftar disini</a>
+    </div>
+    <button type="submit" class="btn w-100" id="submitBtn">
+      <span id="btnText">Sign In</span>
+      <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
+    </button>
+  </form>
+</div>
+{% endblock %}
