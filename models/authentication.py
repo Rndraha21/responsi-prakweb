@@ -42,7 +42,7 @@ class Authentication:
                     "password": password,
                     "options": {
                         "data": {"full_name": full_name},
-                        "email_redirect_to": "http://localhost:5000/auth/confirmed",
+                        "email_redirect_to": "https://responsi-prakweb.vercel.app/auth/confirmed",
                     },
                 }
             )

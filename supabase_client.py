@@ -12,4 +12,5 @@ options = ClientOptions(httpx_client=httpx_client)
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_ANON_KEY")
+
 supabase = create_client(url, key, options)
