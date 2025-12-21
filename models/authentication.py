@@ -7,9 +7,12 @@ class Authentication:
     @staticmethod
     def sign_in_user(email, password):
         try:
-            return supabase.auth.sign_in_with_password(
+            auth = supabase.auth.sign_in_with_password(
                 {"email": email, "password": password}
             )
+
+            return {"success": True, "auth": auth}
+
         except AuthApiError as e:
             msg = str(e).lower()
 
