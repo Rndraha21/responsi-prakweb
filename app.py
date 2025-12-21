@@ -39,13 +39,14 @@ def sign_in():
             email = form.email.data
             password = form.password.data
 
-            auth = Authentication.sign_in_user(email, password)
+            result = Authentication.sign_in_user(email, password)
 
-            if isinstance(auth, dict):
-                flash(auth["message"], "danger")
+            if not result["success"]:
+                flash(result["message"], "error")
                 return redirect(url_for("sign_in"))
 
-            session.clear()
+            auth = result["auth"]
+            
             session.permanent = True
             session["user_id"] = auth.user.id
             session["email"] = auth.user.email
