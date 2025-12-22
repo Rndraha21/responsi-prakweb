@@ -17,8 +17,11 @@
   <form action="{{ url_for('sign_in') }}" method="POST" novalidate>
     {{ form.hidden_tag() }}
     <div class="text-center mb-4">
-      <h3 class="fw-bold">Sign In</h3>
-      <p>Login ke akun Anda</p>
+      <a class="brand" href="{{ url_for('index') }}">
+        <span class="icon">E</span>SPORTS<span class="icon-brand">PRO</span>
+      </a>
+      <h3 class="fw-bold">Welcome Back</h3>
+      <p class="desc">Log in to your account to continue.</p>
     </div>
 
     <!-- Flash messages -->
@@ -54,11 +57,12 @@
         />
       </div>
     </div>
-    <div class="mb-2 mt-4">
-      Belum punya akun? <a href="{{ url_for('sign_up') }}">Daftar disini</a>
+    <div class="mb-2 mt-4 text-center">
+      Don't have an account?
+      <a href="{{ url_for('sign_up') }}" class="link">Sign Up</a>
     </div>
     <button type="submit" class="btn w-100" id="submitBtn">
-      <span id="btnText">Sign In</span>
+      <span id="btnText">Log in</span>
       <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
     </button>
   </form>

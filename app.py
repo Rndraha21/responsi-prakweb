@@ -46,7 +46,7 @@ def sign_in():
                 return redirect(url_for("sign_in"))
 
             auth = result["auth"]
-            
+
             session.permanent = True
             session["user_id"] = auth.user.id
             session["email"] = auth.user.email

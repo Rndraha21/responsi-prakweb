@@ -7,42 +7,40 @@ class FormSignIn(FlaskForm):
     email = EmailField(
         "Email",
         validators=[
-            DataRequired("Email wajib diisi."),
-            Email("Format email tidak valid."),
+            DataRequired("Email required."),
+            Email("Invalid email."),
         ],
-        render_kw={"placeholder": "Masukkan email"},
+        render_kw={"placeholder": "example@gmail.com"},
     )
 
     password = PasswordField(
         "Password",
-        validators=[DataRequired(message="Password harus diisi")],
-        render_kw={"placeholder": "Masukkan password"},
+        validators=[DataRequired(message="Password required.")],
     )
 
 
 class FormSignUp(FlaskForm):
     full_name = StringField(
-        "Nama Lengkap",
+        "Full name",
         validators=[
-            DataRequired("Nama lengkap harus diisi."),
-            Length(min=4, message=("Nama terlalu pendek.")),
+            DataRequired("Full name required."),
+            Length(min=4, message=("Full name at least 4 character.")),
         ],
-        render_kw={"placeholder": "Masukkan nama lengkap"},
+        render_kw={"placeholder": "John Doe"},
     )
     email = EmailField(
         "Email",
         validators=[
-            DataRequired("Email wajib diisi."),
-            Email("Format email tidak valid."),
+            DataRequired("Email required."),
+            Email("Invalid email."),
         ],
-        render_kw={"placeholder": "Masukkan email"},
+        render_kw={"placeholder": "example@gmail.com"},
     )
 
     password = PasswordField(
         "Password",
         validators=[
-            DataRequired("Password tidak boleh kosong."),
-            Length(min=6, message="Password minimal 6 karakter."),
+            DataRequired("Password required."),
+            Length(min=6, message="Password at least 6 character."),
         ],
-        render_kw={"placeholder": "Masukkan password"},
     )

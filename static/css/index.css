@@ -2,7 +2,6 @@
 
 :root {
   --bg-primary: #141721;
-  --bg-secondary: #272333;
 }
 
 body {
@@ -172,11 +171,15 @@ body {
   border-radius: 50px;
   padding: 1rem;
   color: #94a3b8;
-  transition: color 0.2s linear;
+  transition: all 0.2s linear;
 }
 
-#home .btn-home-find:hover,
+#home .btn-home-find:hover {
+  color: #fff;
+}
+
 #home .btn-home-join:hover {
+  background-color: rgba(153, 90, 242, 1);
   color: #fff;
 }
 

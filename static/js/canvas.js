@@ -57,13 +57,6 @@ class Particle {
   }
 }
 
-// const init = () => {
-//   for (let i = 0; i < 100; i++) {
-//     particlesArray.push(new Particle());
-//   }
-// };
-
-// init();
 
 const handleParticles = () => {
   for (let i = 0; i < particlesArray.length; i++) {
@@ -92,8 +85,6 @@ const handleParticles = () => {
 
 const animate = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
-  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
   handleParticles();
   hue += 5;
   requestAnimationFrame(animate);
