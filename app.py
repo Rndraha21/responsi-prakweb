@@ -97,12 +97,11 @@ def logout():
 
 
 @app.route("/")
-@login_required
 def index():
     email = session.get("email")
-    username = email.split("@")[0] if email else "User"
+    username = email.split("@")[0] if email else "sobat esports"
 
-    return render_template("index.html", username=username)
+    return render_template("base.html", username=username)
 
 
 @app.errorhandler(404)
