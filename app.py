@@ -42,7 +42,7 @@ def sign_in():
             result = Authentication.sign_in_user(email, password)
 
             if not result["success"]:
-                flash(result["message"], "error")
+                flash(result["message"], "danger")
                 return redirect(url_for("sign_in"))
 
             auth = result["auth"]

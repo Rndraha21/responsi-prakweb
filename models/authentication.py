@@ -16,19 +16,15 @@ class Authentication:
         except AuthApiError as e:
             msg = str(e).lower()
 
-            if "email not confirmed" in msg:
-                return {
-                    "error": "Email not confirmed",
-                    "message": "Silahkan cek email Anda dan klik link verifikasi sebelum login.",
-                }
-
             if "invalid login credentials" in msg:
                 return {
+                    "success": False,
                     "error": "Invalid credentials",
                     "message": "Email atau password salah.",
                 }
 
             return {
+                "success": False,
                 "error": "Authentication error",
                 "message": "Terjadi kesalahan saat login.",
             }
@@ -47,6 +43,8 @@ class Authentication:
                 }
             )
 
+            print(res.user)
+
             if res.user is None:
                 return {
                     "success": False,
@@ -55,7 +53,7 @@ class Authentication:
 
             return {
                 "success": True,
-                "message": "Pendaftaran berhasil. Silakan cek email.",
+                "message": "Pendaftaran berhasil.",
             }
 
         except Exception as e:
