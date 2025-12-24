@@ -1,6 +1,17 @@
 from supabase_client import supabase
-from postgrest.exceptions import APIError
 from supabase_auth.errors import AuthApiError
+
+
+class UserModel:
+    @staticmethod
+    def get_all():
+        return supabase.table("users").select("username, role").execute()
+
+    @staticmethod
+    def get_posts():
+        return (
+            supabase.table("posts").select("title, content, users(username)").execute()
+        )
 
 
 class Authentication:
@@ -43,8 +54,6 @@ class Authentication:
                 }
             )
 
-            print(res.user)
-
             if res.user is None:
                 return {
                     "success": False,
@@ -58,3 +67,40 @@ class Authentication:
 
         except Exception as e:
             return {"success": False, "message": "Gagal untuk mendaftar."}
+
+
+class Article:
+    @staticmethod
+    def create_new_article(
+        game_name, thumbnail_url, title, content, user_id
+    ):
+        
+        try:
+            res = (
+                supabase.table("articles")
+                .insert(
+                    {
+                        "game_name": game_name,
+                        "thumbnail_url": thumbnail_url,
+                        "title": title,
+                        "content": content,
+                        "user_id": user_id,
+                    }
+                )
+                .execute()
+            )
+            return {"success": True, "category": "success", "data": res.data}
+
+        except Exception as e:
+            print(f"Error Detail: {e}")
+            return {"success": False, "category": "danger", "message": str(e)}
+
+    @staticmethod
+    def get_all_article():
+        res = supabase.table("articles").select("*").eq("status", "approved").execute()
+
+        return {
+            "success": True,
+            "message": "Data berhasil didapatkan",
+            "data": res.data,
+        }

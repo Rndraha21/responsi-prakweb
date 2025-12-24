@@ -42,11 +42,11 @@
     {% endfor %} {% endif %} {% endwith %}
 
     <div class="mb-3">
-      <label class="form-label" for="email">Email</label>
-      {{ form.email() }} {{ showerror(form.email) }}
+      {{ form.email.label(class="form-label") }} {{ form.email() }} {{
+      showerror(form.email) }}
     </div>
     <div class="mb-3">
-      <label class="form-label" for="password">Password</label>
+      {{ form.password.label(class="form-label") }}
       <div class="position-relative">
         {{ form.password() }} {{ showerror(form.password) }}
         <img
@@ -61,7 +61,7 @@
       Don't have an account?
       <a href="{{ url_for('sign_up') }}" class="link">Sign Up</a>
     </div>
-    <button type="submit" class="btn w-100" id="submitBtn">
+    <button type="submit" class="btn w-100" id="submitBtn" disabled>
       <span id="btnText">Log in</span>
       <span id="spinner" class="spinner-border spinner-border-sm d-none"></span>
     </button>

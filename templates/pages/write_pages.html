@@ -1,0 +1,80 @@
+{% extends 'page_template.html' %} {% block title %} Create Tournament {%
+endblock %} {% block content %} {% macro showerror(field)%} {% if field.errors
+%} {% for err in field.errors %}
+<span
+  class="d-flex gap-2 align-items-center mt-2 text-danger"
+  style="font-size: 14px"
+  ><i class="bi bi-info-circle"></i>{{ err }}</span
+>
+{% endfor %} {% endif %} {% endmacro %}
+<canvas id="canvas2"></canvas>
+<div class="row justify-content-center form-container">
+  <div class="col-md-8 col-lg-6">
+    <div class="card border-0 shadow-lg rounded-4 p-4">
+      <h3 class="fw-bold mb-4 text-center">
+        <i class="bi bi-book-half"></i> Write Article
+      </h3>
+
+      <form
+        action="{{ url_for('create_article') }}"
+        enctype="multipart/form-data"
+        method="POST"
+        novalidate
+      >
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold"
+              ><i class="bi bi-controller me-2"></i>{{ form.game_name.label.text
+              }}</label
+            >
+            {{ form.game_name(class="form-select border-2") }} {{
+            showerror(form.game_name)}}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold"
+              ><i class="bi bi-fonts me-2"></i>{{ form.title.label.text
+              }}</label
+            >
+            {{ form.title(class="form-control border-2") }} {{
+            showerror(form.title) }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold"
+            ><i class="bi bi-image me-2"></i>{{ form.thumbnail.label.text
+            }}</label
+          >
+          {{ form.thumbnail(class="form-control border-2") }} {{
+          showerror(form.thumbnail) }}
+          <div class="small mt-2">Format: JPEG/JPG/PNG, Maks 2MB.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold"
+            ><i class="bi bi-text-paragraph me-2"></i>{{ form.content.label.text
+            }}</label
+          >
+          {{ form.content() }} {{ showerror(form.content) }}
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-lg w-100 fw-bold shadow-sm"
+          id="submitBtn"
+        >
+          <span id="btnText">Publish article</span>
+          <span
+            id="spinner"
+            class="spinner-border spinner-border-sm d-none"
+          ></span>
+        </button>
+      </form>
+      {{ ckeditor.load(pkg_type="standard") }} {{
+      ckeditor.config(name="content")}}
+    </div>
+  </div>
+</div>
+{% endblock %}

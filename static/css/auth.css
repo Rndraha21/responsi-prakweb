@@ -2,9 +2,10 @@
 
 body {
   font-family: "Outfit";
-  background: #141721;
+  background: #141721 !important;
   color: #fff;
   position: relative;
+  z-index: 1;
 }
 
 #canvas {
@@ -12,12 +13,13 @@ body {
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  background: transparent;
 }
 
 #form-container {
-  background-color: rgba(153, 90, 242, 0.1);
+  background: #141721;
   border: 2px solid #995af2;
-  z-index: 999;
+  z-index: 2;
 }
 
 #form-container input {
@@ -85,6 +87,12 @@ a.brand .icon-brand {
 #form-container button[type="submit"]:hover {
   background: #995af2;
   color: #fff;
+}
+
+#form-container button[type="submit"]:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+  border: none;
 }
 
 #form-container .desc {

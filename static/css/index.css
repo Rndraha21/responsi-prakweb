@@ -90,12 +90,20 @@ body {
   transform: rotate(0deg);
 }
 
+.username {
+  background: linear-gradient(to right, #9d5aef, #e649b8);
+  background-clip: text;
+  color: transparent;
+}
+
 /* Home page style */
 #home {
   color: white;
   min-height: calc(100vh - 150px);
   position: relative;
   overflow: hidden;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 #canvas {
@@ -193,4 +201,54 @@ body {
     font-size: 1rem;
     width: 100%;
   }
+}
+
+#tournaments,
+#news {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  color: #fff;
+}
+
+#tournaments > h1,
+#news > h1 {
+  font-family: "Rajdhani";
+  font-weight: bold;
+  font-size: 2.2rem;
+}
+
+#tournaments p,
+#news p {
+  color: #94a3b8;
+}
+
+.link {
+  color: #9d5aef;
+  text-decoration: none;
+}
+
+.link i {
+  animation: arrow 1s infinite;
+}
+
+.link:hover {
+  text-decoration: underline solid;
+  color: #e649b8;
+}
+
+@keyframes arrow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+}
+
+.flash-message {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 200px;
 }

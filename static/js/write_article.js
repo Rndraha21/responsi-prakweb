@@ -1,56 +1,17 @@
-const iconEl = document.getElementById("toggle-visibility");
-const passwordInput = document.getElementById("password");
-const inputs = document.querySelectorAll("input");
-const submitBtn = document.querySelector("button[type=submit]");
-
-const checkInputs = () => {
-  const allField = Array.from(inputs).every(
-    (input) => input.value.trim() != ""
-  );
-
-  submitBtn.disabled = !allField;
-};
-
-inputs.forEach((input) => {
-  input.addEventListener("input", checkInputs);
-});
-
-if (iconEl && passwordInput) {
-  passwordInput.addEventListener("input", () => {
-    if (passwordInput.value.length > 0) {
-      iconEl.classList.remove("hidden");
-    } else {
-      iconEl.classList.add("hidden");
-    }
-  });
-
-  iconEl.addEventListener("click", () => {
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      iconEl.src = "/icons/invisible.svg";
-      iconEl.alt = "hidden";
-    } else {
-      passwordInput.type = "password";
-      iconEl.src = "/icons/visible.svg";
-      iconEl.alt = "show";
-    }
-  });
-}
-
 const form = document.querySelector("form");
-const btn = document.getElementById("submitBtn");
+const submitBtn = document.getElementById("submitBtn");
 const text = document.getElementById("btnText");
 const spinner = document.getElementById("spinner");
 
 if (form) {
   form.addEventListener("submit", () => {
-    btn.disabled = true;
+    submitBtn.disabled = true;
     text.innerText = "Loading...";
     spinner.classList.remove("d-none");
   });
 }
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("canvas2");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;

@@ -1,0 +1,26 @@
+<div id="news" class="container mt-4">
+  <h1>LATEST NEWS</h1>
+  <div class="d-flex flex-column flex-md-row justify-content-md-between mb-4">
+    <p class="mb-0">Stay updated with the latest in esports.</p>
+    <a href="#" class="link d-flex align-items-center gap-2"
+      >Read blog <i class="bi bi-arrow-right-short"></i
+    ></a>
+  </div>
+
+  <div class="d-flex gap-4">
+    {% for data in response %}
+    <div class="card" style="width: 18rem; height: auto;">
+      <img
+        src="/uploads/{{ data.thumbnail_url }}"
+        class="card-img-top"
+        alt="Thumbnail {{ data.title }}"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ data.title }}</h5>
+        <p class="card-text">{{ data.content | safe | truncate(100)}}</p>
+        <a href="#" class="btn">Read more</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
