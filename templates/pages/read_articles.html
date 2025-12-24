@@ -1,6 +1,171 @@
 {% extends 'page_template.html' %} {% block title %} Articles {% endblock %} {%
 block content %}
-<div id="read-all-page">
-    
+<canvas id="canvas2"></canvas>
+<div class="row mt-4">
+  <div class="col-md-8">
+    <h1 class="title">Articles</h1>
+    <div class="container-article mb-4">
+      {% for data in latest %} {% if loop.first %}
+      <div class="card-featured">
+        <img src="{{ data.public_url }}" class="featured-img" />
+        <div class="featured-content mt-4">
+          <span class="badge" style="background-color: #9d5aef; font-size: 1rem"
+            >{{ data.game_name }}</span
+          >
+          <h2
+            style="
+              background: linear-gradient(to right, #6c2dc4, #ffffff);
+              color: transparent;
+              background-clip: text;
+            "
+          >
+            {{ data.title }}
+          </h2>
+          <div class="mb-0" style="font-size: 1rem">
+            {% if session.get('user_id') == data.user_id %}
+            <span
+              class="badge"
+              style="background: linear-gradient(to right, #6c2dc4, #e649b8)"
+              >Anda</span
+            >
+            • {{ data.created_at }} {% else %} {{ data.profiles.full_name |
+            truncate(12) }} • {{ data.created_at }} {% endif %}
+          </div>
+          <div class="mt-2">
+            <button class="btn-like" data-id="{{ data.id }}">
+              <i
+                class="bi heart-icon {% if data.is_liked %}bi-heart-fill {% else %} bi-heart {% endif %}"
+              ></i>
+              <span id="count-{{ data.id }}" class="count-element"
+                >{{ data.total_likes }}</span
+              >
+            </button>
+            <button
+              class="share-btn"
+              data-url="{{ url_for('read_more', id=data.id, _external=True) }}"
+            >
+              <i class="bi bi-share" style="color: #6c2dc4"></i>
+            </button>
+          </div>
+          <hr />
+          <div>{{ data.content | safe }}</div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card-list">
+        <div class="list-text">
+          <a
+            href="{{ url_for('read_more', id=data.id )}}"
+            class="text-decoration-none"
+            style="color: #94a3b8"
+          >
+            <span
+              class="badge"
+              style="background-color: #9d5aef; font-size: 1rem"
+              >{{ data.game_name }}</span
+            >
+            <h3
+              style="
+                background: linear-gradient(to right, #6c2dc4, #ffffff);
+                color: transparent;
+                background-clip: text;
+              "
+            >
+              {{ data.title }}
+            </h3>
+            <p>{{ data.content | safe | truncate(300) }}</p>
+            <div class="mb-0" style="font-size: 13px">
+              {% if session.get('user_id') == data.user_id %}
+              <span
+                class="badge"
+                style="background: linear-gradient(to right, #6c2dc4, #e649b8)"
+                >Anda</span
+              >
+              • {{ data.created_at }} {% else %} {{ data.profiles.full_name }} •
+              {{ data.created_at }} {% endif %}
+            </div>
+          </a>
+
+          <div class="mt-2">
+            <button class="btn-like" data-id="{{ data.id }}">
+              <i
+                class="bi heart-icon {% if data.is_liked %}bi-heart-fill {% else %} bi-heart {% endif %}"
+              ></i>
+              <span id="count-{{ data.id }}" class="count-element"
+                >{{ data.total_likes }}</span
+              >
+            </button>
+            <button
+              class="share-btn"
+              data-url="{{ url_for('read_more', id=data.id, _external=True) }}"
+            >
+              <i class="bi bi-share" style="color: #6c2dc4"></i>
+            </button>
+          </div>
+        </div>
+        <img src="{{ data.public_url }}" class="list-img" />
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="position-sticky top-0">
+      <h1 class="title">Most Popular</h1>
+      {% for data in popular %}
+      <div class="card card-grid mb-4">
+        <div style="width: 100%">
+          <img
+            src="{{ data.public_url }}"
+            class="card-img-top"
+            alt="Picture {{ data.title }}"
+            style="object-fit: cover; height: 200px"
+          />
+        </div>
+        <div class="card-body card-grid-inner">
+          <div>
+            <span class="badge mb-0 mt-2" style="background-color: #6c2dc4"
+              >{{ data.game_name }}</span
+            >
+            <h5 class="card-title mb-4 mt-0">{{ data.title }}</h5>
+          </div>
+          <div class="card-text">
+            {{ data.content | safe | truncate(200)}}
+            <a href="{{ url_for('read_more', id=data.id) }}" class="link"
+              >Read more</a
+            >
+          </div>
+          <div class="mb-0">
+            <div class="mb-0">
+              {% if session.get('user_id') == data.user_id %}
+              <span
+                class="badge"
+                style="background: linear-gradient(to right, #6c2dc4, #e649b8)"
+                >Anda</span
+              >
+              • {{ data.created_at }} {% else %} {{ data.profiles.full_name }} •
+              {{ data.created_at }} {% endif %}
+            </div>
+            <div class="mt-2">
+              <button class="btn-like" data-id="{{ data.id }}">
+                <i
+                  class="bi heart-icon {% if data.is_liked %}bi-heart-fill {% else %} bi-heart {% endif %}"
+                ></i>
+                <span id="count-{{ data.id }}" class="count-element"
+                  >{{ data.total_likes }}</span
+                >
+              </button>
+              <button
+                class="share-btn"
+                data-url="{{ url_for('read_more', id=data.id, _external=True) }}"
+              >
+                <i class="bi bi-share" style="color: #6c2dc4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}

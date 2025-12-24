@@ -65,7 +65,9 @@ class Authentication:
 
 class Article:
     @staticmethod
-    def create_new_article(game_name, public_url, title, content, user_id):
+    def create_new_article(
+        game_name, public_url, title, content, user_id, status="pending"
+    ):
 
         try:
             res = (
@@ -77,6 +79,7 @@ class Article:
                         "title": title,
                         "content": content,
                         "user_id": user_id,
+                        "status": status,
                     }
                 )
                 .execute()
@@ -101,13 +104,109 @@ class Article:
         return {"success": True, "data": res.data}
 
     @staticmethod
-    def get_all_article():
+    def get_articles(current_user_id):
         res = (
             supabase.table("articles")
-            .select("*")
+            .select("*, profiles(full_name)")
             .eq("status", "approved")
             .order("created_at", desc=True)
             .execute()
         )
 
-        return {"success": True, "data": res.data}
+        articles = res.data
+
+        for article in articles:
+            likes_data = (
+                supabase.table("likes")
+                .select("*", count="exact")
+                .eq("article_id", article["id"])
+                .execute()
+            )
+            article["total_likes"] = likes_data.count
+
+            if current_user_id:
+                check_like = (
+                    supabase.table("likes")
+                    .select("*")
+                    .eq("article_id", article["id"])
+                    .eq("user_id", current_user_id)
+                    .execute()
+                )
+                article["is_liked"] = len(check_like.data) > 0
+            else:
+                article["is_liked"] = False
+
+        popular_articles = sorted(
+            articles, key=lambda x: x["total_likes"], reverse=True
+        )
+
+        return {"success": True, "latest": articles, "popular": popular_articles[:2]}
+
+    @staticmethod
+    def get_article_by_id(article_id, current_user_id=None):
+        res = (
+            supabase.table("articles")
+            .select("*, profiles(full_name)")
+            .eq("id", article_id)
+            .maybe_single()
+            .execute()
+        )
+
+        if not res or res.data is None:
+            return None
+
+        article = res.data
+        likes_count = (
+            supabase.table("likes")
+            .select("*", count="exact")
+            .eq("article_id", article_id)
+            .execute()
+        )
+        article["total_likes"] = likes_count.count
+
+        if current_user_id:
+            check = (
+                supabase.table("likes")
+                .select("*")
+                .eq("article_id", article_id)
+                .eq("user_id", current_user_id)
+                .execute()
+            )
+            article["is_liked"] = len(check.data) > 0
+        else:
+            article["is_liked"] = False
+
+        return article
+
+    @staticmethod
+    def like_article(article_id, user_id):
+        existing_like = (
+            supabase.table("likes")
+            .select("*")
+            .eq("article_id", article_id)
+            .eq("user_id", user_id)
+            .execute()
+        )
+
+        if existing_like.data:
+            supabase.table("likes").delete().eq("article_id", article_id).eq(
+                "user_id", user_id
+            ).execute()
+
+            status = "unliked"
+        else:
+            supabase.table("likes").insert(
+                {"user_id": user_id, "article_id": article_id}
+            ).execute()
+            status = "liked"
+
+        count_res = (
+            supabase.table("likes")
+            .select("*", count="exact")
+            .eq("article_id", article_id)
+            .execute()
+        )
+
+        total_likes = count_res.count
+
+        return {"status": status, "total_likes": total_likes}

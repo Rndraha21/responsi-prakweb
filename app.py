@@ -9,6 +9,7 @@ from flask import (
     url_for,
     flash,
     abort,
+    jsonify,
 )
 from models import UserModel, Authentication, Article
 from forms import FormSignIn, FormSignUp, FormArticle
@@ -219,12 +220,10 @@ def create_article():
             )
 
             model = Article()
+            status = "approved" if session.get("role") == "admin" else "pending"
+
             res = model.create_new_article(
-                game_name,
-                public_url,
-                title,
-                content,
-                session["user_id"],
+                game_name, public_url, title, content, session["user_id"], status
             )
 
             if res["success"]:
@@ -243,16 +242,56 @@ def create_article():
 
 
 @app.route("/read/articles")
-@login_required
 def read_articles():
     email = session.get("email")
     username = email.split("@")[0] if email else ""
 
-    response = Article().get_all_article()
+    response = Article().get_articles(session.get("user_id"))
+
+    now = arrow.now()
+    for article in response["latest"]:
+        arw = arrow.get(article["created_at"])
+        diff_day = (now - arw).days
+
+        date = arw.format("ddd, DD MMM YYYY", locale="id")
+        relatif = arw.humanize(locale="id")
+
+        if diff_day > 1:
+            article["created_at"] = f"{date}"
+        else:
+            article["created_at"] = f"{relatif}"
 
     return render_template(
-        "/pages/read_articles.html", username=username, response=response["data"]
+        "/pages/read_articles.html",
+        username=username,
+        latest=response["latest"],
+        popular=response["popular"],
     )
+
+
+@app.route("/read/article/<int:id>")
+def read_more(id):
+    email = session.get("email")
+    username = email.split("@")[0] if email else ""
+
+    user_id = session.get("user_id")
+    article = Article().get_article_by_id(id, user_id)
+
+    if not article:
+        abort(404)
+
+    arw = arrow.get(article["created_at"])
+    article["created_at"] = arw.format("dddd, DD MMMM YYYY", locale="id")
+
+    return render_template("pages/read_more.html", article=article, username=username)
+
+
+@app.route("/like/article/<id>")
+@login_required
+def like_article(id):
+    user_id = session.get("user_id")
+    res = Article().like_article(id, user_id)
+    return jsonify(res)
 
 
 @app.route("/admin/dashboard")

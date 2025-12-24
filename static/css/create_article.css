@@ -1,6 +1,4 @@
 .form-container {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
   position: relative;
 }
 
@@ -46,7 +44,7 @@ select:focus {
 }
 
 option:checked {
-  background: rgba(153, 90, 242, 0.3);
+  background: rgba(153, 90, 242, 0.1);
 }
 
 input,

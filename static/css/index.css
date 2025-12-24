@@ -265,6 +265,7 @@ body {
   display: grid;
   grid-template-rows: 200px 1fr;
   background: #191c25;
+  border: 1px solid #9d5aef;
 }
 
 .card-title {
@@ -276,6 +277,6 @@ body {
 .card-grid-inner {
   display: grid;
   grid-template-rows: subgrid;
-  grid-row: span 4;
+  grid-row: span 3;
   gap: 10px;
 }
