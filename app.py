@@ -162,7 +162,7 @@ def logout():
 def index():
     model = Article()
     role = session.get("role", "guest")
-    response = model.get_all_article()
+    response = model.get_latest_article()
 
     now = arrow.now()
 
@@ -248,7 +248,11 @@ def read_articles():
     email = session.get("email")
     username = email.split("@")[0] if email else ""
 
-    return render_template("/pages/read_articles.html", username=username)
+    response = Article().get_all_article()
+
+    return render_template(
+        "/pages/read_articles.html", username=username, response=response["data"]
+    )
 
 
 @app.route("/admin/dashboard")

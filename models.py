@@ -88,7 +88,7 @@ class Article:
             return {"success": False, "category": "danger", "message": str(e)}
 
     @staticmethod
-    def get_all_article():
+    def get_latest_article():
         res = (
             supabase.table("articles")
             .select("*, profiles(full_name)")
@@ -98,8 +98,16 @@ class Article:
             .execute()
         )
 
-        return {
-            "success": True,
-            "message": "Data berhasil didapatkan",
-            "data": res.data,
-        }
+        return {"success": True, "data": res.data}
+
+    @staticmethod
+    def get_all_article():
+        res = (
+            supabase.table("articles")
+            .select("*")
+            .eq("status", "approved")
+            .order("created_at", desc=True)
+            .execute()
+        )
+
+        return {"success": True, "data": res.data}
