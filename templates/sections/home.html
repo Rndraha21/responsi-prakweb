@@ -33,17 +33,21 @@
         d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41z"
       />
     </svg>
-    <span>THE FUTURE OF COMPETITIVE GAMING</span>
+    <span>INSIDE THE WORLD OF ESPORTS</span>
   </div>
   <h1 class="text-center title">
-    DOMINATE <br />THE <span id="title-gradient">ARENA</span>
+    UNCOVER THE <br />NEXT <span id="title-gradient">CHAPTER</span>
   </h1>
   <p class="sub-title mb-4 text-center">
-    Join the elite. Compete in top-tier tournaments, track your progress, and
-    rise to glory.
+    Deep dives into pro strategies, exclusive interviews, and the stories behind
+    the world's biggest gaming icons.
   </p>
   <div class="d-flex gap-4">
-    <a href="#" class="btn btn-home-find">Browse Tournaments</a>
-    <a href="#" class="btn btn-home-join">Login or Register</a>
+    <a href="#news" class="btn btn-home-find">Explore News</a>
+    {% if not username %}
+    <a href="{{ url_for('sign_in') }}" class="btn btn-home-join"
+      >Login or Register</a
+    >
+    {% endif %}
   </div>
 </div>

@@ -1,4 +1,5 @@
 import os
+import uuid
 from flask import (
     Flask,
     render_template,
@@ -7,6 +8,7 @@ from flask import (
     redirect,
     url_for,
     flash,
+    abort,
 )
 from models import UserModel, Authentication, Article
 from forms import FormSignIn, FormSignUp, FormArticle
@@ -15,10 +17,10 @@ from functools import wraps
 from flask_ckeditor import CKEditor
 from werkzeug.utils import secure_filename
 from supabase_client import supabase
+import arrow
 
 ckeditor = CKEditor()
 
-UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
 app = Flask(
@@ -30,12 +32,11 @@ ckeditor.init_app(app)
 app.config["CKEDITOR_HEIGHT"] = 200
 app.config["CKEDITOR_CODE_THEME"] = "monokai_subl ime"
 app.config["CKEDITOR_ENABLE_CODESNIPPET"] = True
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
 app.secret_key = "responsifprakweb2025"
 app.permanent_session_lifetime = timedelta(days=5)
 
 
+# Middleware
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -61,8 +62,25 @@ def login_required(f):
     return decorated
 
 
+def admin_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user_id = session.get("user_id", "")
+        user_role = session.get("role", "")
+        if not user_id or user_role != "admin":
+            abort(404)
+        return f(*args, **kwargs)
+
+    return decorated
+
+
+# Routes
 @app.route("/sign-in", methods=["GET", "POST"])
 def sign_in():
+    if "user_id" in session:
+        flash("You try to login. Please logout first.", "warning")
+        return redirect(url_for("index"))
+
     form = FormSignIn()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -70,6 +88,8 @@ def sign_in():
             password = form.password.data
 
             result = Authentication.sign_in_user(email, password)
+            user_role = UserModel().get_role(result["auth"].user.id)
+            role = user_role.data[0]["role"]
 
             if not result["success"]:
                 flash(result["message"], "danger")
@@ -81,14 +101,22 @@ def sign_in():
             session["user_id"] = auth.user.id
             session["email"] = auth.user.email
             session["access_token"] = auth.session.access_token
+            session["role"] = role
             session["refresh_token"] = auth.session.refresh_token
 
+            email = auth.user.email
+            username = email.split("@")[0]
+
+            flash(f"Welcome {username}!", "success")
             return redirect(url_for("index"))
     return render_template("auth/sign_in.html", form=form)
 
 
 @app.route("/sign-up", methods=["GET", "POST"])
 def sign_up():
+    if "user_id" in session:
+        flash("You try to sign up. Please logout first.", "warning")
+        return redirect(url_for("index"))
     form = FormSignUp()
 
     if request.method == "POST":
@@ -123,73 +151,129 @@ def auth_confirmed():
 @app.route("/logout")
 @login_required
 def logout():
+    email = session.get("email")
+    username = email.split("@")[0] if email else ""
     session.clear()
+    flash(f"Logout successfully see u again {username}", "success")
     return redirect(url_for("index"))
 
 
 @app.route("/")
 def index():
     model = Article()
+    role = session.get("role", "guest")
     response = model.get_all_article()
+
+    now = arrow.now()
+
+    for article in response["data"]:
+        arw = arrow.get(article["created_at"])
+        diff_day = (now - arw).days
+
+        date = arw.format("ddd, DD MMM YYYY", locale="id")
+        relatif = arw.humanize(locale="id")
+
+        if diff_day > 7:
+            article["created_at"] = f"{date}"
+        else:
+            article["created_at"] = f"{relatif}"
+
     email = session.get("email")
     username = email.split("@")[0] if email else ""
 
     return render_template(
-        "section_template.html", username=username, response=response["data"]
+        "section_template.html", username=username, response=response["data"], role=role
     )
 
 
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route("/write-article", methods=["GET", "POST"])
+@app.route("/create/article", methods=["GET", "POST"])
 @login_required
 def create_article():
-    model = Article()
     form = FormArticle()
     email = session.get("email")
     username = email.split("@")[0] if email else ""
 
-    if request.method == "POST":
-        if form.validate_on_submit():
-            game_name = form.game_name.data
-            file = form.thumbnail.data
-            title = form.title.data
-            filename = secure_filename(file.filename)
-            unique_name = f"{filename}".replace(" ", "_")
-            content = form.content.data
+    if request.method == "POST" and form.validate_on_submit():
+        file = form.thumbnail.data
 
+        game_name = form.game_name.data
+        title = form.title.data
+        content = form.content.data
+        filename = secure_filename(file.filename)
+
+        ext = os.path.splitext(filename)[1]
+        print(ext)
+
+        unique_name = f"{uuid.uuid4()}{ext}"
+
+        try:
+            file_data = file.read()
+            supabase.storage.from_("thumbnails").upload(
+                path=unique_name,
+                file=file_data,
+                file_options={"content-type": file.content_type},
+            )
+
+            public_url = supabase.storage.from_("thumbnails").get_public_url(
+                unique_name
+            )
+
+            model = Article()
             res = model.create_new_article(
                 game_name,
-                unique_name,
+                public_url,
                 title,
                 content,
                 session["user_id"],
             )
 
             if res["success"]:
-                flash(
-                    "Article successfully created. Your post will available on public after admin review.",
-                    f"{res["category"]}",
-                )
-
-                save_path = os.path.join(
-                    app.root_path, app.config["UPLOAD_FOLDER"], unique_name
-                )
-                file.save(save_path)
+                flash("Article successfully created.", "success")
                 return redirect(url_for("index"))
-
             else:
-                flash("Something went wrong. Failed to post article", f"{res["category"]}")
-                return redirect(url_for("index"))
+                flash("Failed to save to database.", "danger")
+                return redirect(url_for("create_article"))
 
-    return render_template("/pages/write_pages.html", form=form, username=username)
+        except Exception as e:
+            print(f"Error: {e}")
+            flash("Failed to upload image.", "danger")
+            return redirect(url_for("create_article"))
+
+    return render_template("/pages/create_article.html", form=form, username=username)
 
 
+@app.route("/read/articles")
+@login_required
+def read_articles():
+    email = session.get("email")
+    username = email.split("@")[0] if email else ""
+
+    return render_template("/pages/read_articles.html", username=username)
+
+
+@app.route("/admin/dashboard")
+@admin_required
+def dashboard():
+    return render_template("/pages/read_articles.html")
+
+
+# Error handling
 @app.errorhandler(404)
 def page_not_found(e):
+    print(f"Server Error: {e}")
     return render_template("not_found.html")
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    print(f"Server Error: {error}")
+    return "Internal server erro", 500
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    print({e})
+    return "Internal server error", 500
 
 
 if __name__ == "__main__":

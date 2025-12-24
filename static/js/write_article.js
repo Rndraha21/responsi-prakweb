@@ -6,7 +6,7 @@ const spinner = document.getElementById("spinner");
 if (form) {
   form.addEventListener("submit", () => {
     submitBtn.disabled = true;
-    text.innerText = "Loading...";
+    text.innerText = "Creating...";
     spinner.classList.remove("d-none");
   });
 }

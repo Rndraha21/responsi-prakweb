@@ -4,14 +4,8 @@ from supabase_auth.errors import AuthApiError
 
 class UserModel:
     @staticmethod
-    def get_all():
-        return supabase.table("users").select("username, role").execute()
-
-    @staticmethod
-    def get_posts():
-        return (
-            supabase.table("posts").select("title, content, users(username)").execute()
-        )
+    def get_role(user_id):
+        return supabase.table("profiles").select("role").eq("id", user_id).execute()
 
 
 class Authentication:
@@ -71,17 +65,15 @@ class Authentication:
 
 class Article:
     @staticmethod
-    def create_new_article(
-        game_name, thumbnail_url, title, content, user_id
-    ):
-        
+    def create_new_article(game_name, public_url, title, content, user_id):
+
         try:
             res = (
                 supabase.table("articles")
                 .insert(
                     {
                         "game_name": game_name,
-                        "thumbnail_url": thumbnail_url,
+                        "public_url": public_url,
                         "title": title,
                         "content": content,
                         "user_id": user_id,
@@ -97,7 +89,14 @@ class Article:
 
     @staticmethod
     def get_all_article():
-        res = supabase.table("articles").select("*").eq("status", "approved").execute()
+        res = (
+            supabase.table("articles")
+            .select("*, profiles(full_name)")
+            .eq("status", "approved")
+            .order("created_at", desc=True)
+            .limit(4)
+            .execute()
+        )
 
         return {
             "success": True,

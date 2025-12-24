@@ -1,4 +1,4 @@
-{% extends 'page_template.html' %} {% block title %} Create Tournament {%
+{% extends 'page_template.html' %} {% block title %} Create Article {%
 endblock %} {% block content %} {% macro showerror(field)%} {% if field.errors
 %} {% for err in field.errors %}
 <span
@@ -12,7 +12,7 @@ endblock %} {% block content %} {% macro showerror(field)%} {% if field.errors
   <div class="col-md-8 col-lg-6">
     <div class="card border-0 shadow-lg rounded-4 p-4">
       <h3 class="fw-bold mb-4 text-center">
-        <i class="bi bi-book-half"></i> Write Article
+        <i class="bi bi-book-half"></i> Create Article
       </h3>
 
       <form
@@ -49,7 +49,7 @@ endblock %} {% block content %} {% macro showerror(field)%} {% if field.errors
           >
           {{ form.thumbnail(class="form-control border-2") }} {{
           showerror(form.thumbnail) }}
-          <div class="small mt-2">Format: JPEG/JPG/PNG, Maks 2MB.</div>
+          <div class="small mt-2">Format: JPEG/JPG/PNG, Maks 4MB.</div>
         </div>
 
         <div class="mb-3">

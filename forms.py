@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SelectField
-from wtforms.validators import DataRequired, Length, Email, AnyOf
+from wtforms.validators import DataRequired, Length, Email, AnyOf, ValidationError
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_ckeditor import CKEditorField
 
@@ -85,6 +85,18 @@ class FormArticle(FlaskForm):
             FileRequired(message="No selected file."),
         ],
     )
+
+    def validate_thumbnail(self, field):
+        if field.data:
+            max_size = 4 * 1024 * 1024
+            
+            file_data = field.data.read()
+            size = len(file_data)
+            
+            field.data.seek(0)
+            
+            if size > max_size:
+                raise ValidationError(f"File to large! Max. 4MB, (Size: {size/1024/1024:.2f}MB)")
 
     title = StringField(
         "Title",
