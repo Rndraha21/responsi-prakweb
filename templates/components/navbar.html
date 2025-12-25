@@ -21,13 +21,13 @@
         <a class="nav-link" href="{{ url_for('create_article') }}"
           >WRITE ARTICLE</a
         >
-        {% if role == "admin" %}
+        {% if username %} {% if role == "admin" %}
         <a href="{{ url_for('dashboard_admin') }}" class="nav-link"
           >ADMIN DASHBOARD</a
         >
         {% else %}
         <a href="{{ url_for('dashboard_user') }}" class="nav-link">DASHBOARD</a>
-        {% endif %}
+        {% endif %} {% endif %}
       </div>
 
       <div class="d-lg-flex justify-content-lg-end text-center mt-3 mt-lg-0">

@@ -50,11 +50,13 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <div class="navbar-nav mx-auto text-center">
               <a class="nav-link active" href="{{ url_for('index') }}">HOME</a>
-              <a class="nav-link active" href="{{ url_for('read_articles') }}">ARTICLES</a>
+              <a class="nav-link active" href="{{ url_for('read_articles') }}"
+                >ARTICLES</a
+              >
               <a class="nav-link" href="{{ url_for('create_article') }}"
                 >WRITE ARTICLE</a
               >
-              {% if role == "admin" %}
+              {% if username %} {% if role == "admin" %}
               <a href="{{ url_for('dashboard_admin') }}" class="nav-link"
                 >ADMIN DASHBOARD</a
               >
@@ -62,7 +64,7 @@
               <a href="{{ url_for('dashboard_user') }}" class="nav-link"
                 >DASHBOARD</a
               >
-              {% endif %}
+              {% endif %} {% endif %}
             </div>
 
             <div
