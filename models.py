@@ -104,14 +104,17 @@ class Article:
         return {"success": True, "data": res.data}
 
     @staticmethod
-    def get_articles(current_user_id):
-        res = (
+    def get_articles(current_user_id, game_filter=None):
+        query = (
             supabase.table("articles")
             .select("*, profiles(full_name)")
             .eq("status", "approved")
-            .order("created_at", desc=True)
-            .execute()
         )
+
+        if game_filter:
+            query = query.eq("game_name", game_filter)
+
+        res = query.order("created_at", desc=True).execute()
 
         articles = res.data
 

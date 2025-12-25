@@ -246,7 +246,9 @@ def read_articles():
     email = session.get("email")
     username = email.split("@")[0] if email else ""
 
-    response = Article().get_articles(session.get("user_id"))
+    game_filter = request.args.get("game")
+
+    response = Article().get_articles(session.get("user_id"), game_filter)
 
     now = arrow.now()
     for article in response["latest"]:
@@ -296,8 +298,21 @@ def like_article(id):
 
 @app.route("/admin/dashboard")
 @admin_required
-def dashboard():
-    return render_template("/pages/read_articles.html")
+def dashboard_admin():
+    email = session.get("email")
+    username = email.split("@")[0] if email else ""
+    role = session.get("role", "guest")
+
+    return render_template("/pages/read_articles.html", username=username, role=role)
+
+
+@app.route("/user/dashboard")
+@login_required
+def dashboard_user():
+    email = session.get("email")
+    username = email.split("@")[0] if email else ""
+
+    return render_template("/pages/read_articles.html", username=username)
 
 
 # Error handling

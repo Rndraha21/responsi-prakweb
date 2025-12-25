@@ -22,7 +22,11 @@
           >WRITE ARTICLE</a
         >
         {% if role == "admin" %}
-        <a href="{{ url_for('dashboard') }}" class="nav-link">DASHBOARD</a>
+        <a href="{{ url_for('dashboard_admin') }}" class="nav-link"
+          >ADMIN DASHBOARD</a
+        >
+        {% else %}
+        <a href="{{ url_for('dashboard_user') }}" class="nav-link">DASHBOARD</a>
         {% endif %}
       </div>
 

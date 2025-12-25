@@ -13,6 +13,7 @@ body {
   background: var(--bg-primary);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  border-bottom: 1px solid #6c2dc4;
 }
 
 .navbar-brand {
@@ -272,6 +273,7 @@ body {
   color: transparent;
   background: linear-gradient(to right, #6c2dc4, #e649b8);
   background-clip: text;
+  font-weight: 800;
 }
 
 .card-grid-inner {

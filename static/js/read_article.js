@@ -83,3 +83,8 @@ function copyLink() {
     showConfirmButton: false,
   });
 }
+
+const contentSummary = document.querySelector(".content-summary");
+contentSummary.addEventListener("click", () => {
+  contentSummary.classList.toggle("expanded");
+});
