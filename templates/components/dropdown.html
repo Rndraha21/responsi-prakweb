@@ -1,0 +1,64 @@
+<div class="dropdown">
+  <button
+    class="btn btn-secondary dropdown-toggle"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    Filter Articles
+  </button>
+  <ul class="dropdown-menu">
+    <li>
+      <a class="dropdown-item" href="{{ url_for('read_articles') }}">All</a>
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='MOBILE LEGENDS') }}"
+        >Mobile Legends</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='LEAGUE OF LEGENDS' ) }}"
+        >League of Legends</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='PUBG MOBILE') }}"
+        >PUBG Mobile</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='FREE FIRE') }}"
+        >Free Fire</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='HONOR OF KINGS') }}"
+        >Honor Of Kings</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='EFOOTBALL') }}"
+        >E-Foot Ball</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('read_articles', game='DOTA2') }}"
+        >DOTA2</a
+      >
+    </li>
+  </ul>
+</div>

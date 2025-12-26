@@ -1,0 +1,44 @@
+.container-dashboard {
+  color: #94a3b8;
+  margin-top: 2rem;
+}
+
+.container-dashboard h1 {
+  background: linear-gradient(to right, #9d5aef, #e649b8);
+  background-clip: text;
+  color: transparent;
+  font-family: "Rajdhani";
+  font-weight: 800;
+  margin-bottom: 0;
+}
+
+.delete-btn {
+  border: none;
+  background: none;
+  color: #9d5aef;
+  font-size: 1rem;
+}
+
+.approve-btn {
+  border: 1px solid #9d5aef;
+  border-radius: 50px;
+  background: rgba(157, 90, 239, 0.2);
+  color: #9d5aef;
+  padding: 2px 12px;
+}
+
+.reject-btn {
+  border: 1px solid #fa8072;
+  border-radius: 50px;
+  background: rgba(250, 128, 114, 0.2);
+  color: #fa8072;
+  padding: 2px 12px;
+}
+
+.pending-btn {
+  border: 1px solid #e6e68a;
+  border-radius: 50px;
+  background: rgba(230, 230, 138, 0.2);
+  color: #e6e68a;
+  padding: 2px 12px;
+}

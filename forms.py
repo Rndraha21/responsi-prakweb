@@ -50,30 +50,23 @@ class FormSignUp(FlaskForm):
 
 class FormArticle(FlaskForm):
     game_choices = [
-        "MLBB",
-        "VALORANT",
-        "CS2",
+        "MOBILE LEGENDS",
+        "LEAGUE OF LEGENDS" "PUBG MOBILE",
+        "FREE FIRE",
+        "HONOR OF KINGS",
+        "EFOOTBALL",
         "DOTA2",
-        "LOL",
-        "PUBGM",
-        "PUBG",
-        "FREEFIRE",
-        "APEX",
-        "FIFA",
     ]
     game_name = SelectField(
         "Game",
         choices=[
-            ("MLBB", "Mobile Legends: Bang Bang"),
-            ("VALORANT", "Valorant"),
-            ("CS2", "Counter-Strike 2"),
+            ("MOBILE LEGENDS", "Mobile Legends: Bang Bang"),
+            ("LEAGUE OF LEGENDS", "League of Legends"),
+            ("PUBG MOBILE", "PUBG Mobile"),
+            ("FREE FIRE", "Free Fire"),
+            ("HONOR OF KINGS", "Honor of Kings"),
+            ("EFOOTBALL", "E-Football"),
             ("DOTA2", "Dota 2"),
-            ("LOL", "League of Legends"),
-            ("PUBGM", "PUBG Mobile"),
-            ("PUBG", "PUBG: Battlegrounds"),
-            ("FREEFIRE", "Free Fire"),
-            ("APEX", "Apex Legends"),
-            ("FIFA", "EA Sports FC (FIFA)"),
         ],
         validators=[DataRequired(message="Game name required."), AnyOf(game_choices)],
     )
@@ -89,14 +82,16 @@ class FormArticle(FlaskForm):
     def validate_thumbnail(self, field):
         if field.data:
             max_size = 4 * 1024 * 1024
-            
+
             file_data = field.data.read()
             size = len(file_data)
-            
+
             field.data.seek(0)
-            
+
             if size > max_size:
-                raise ValidationError(f"File to large! Max. 4MB, (Size: {size/1024/1024:.2f}MB)")
+                raise ValidationError(
+                    f"File to large! Max. 4MB, (Size: {size/1024/1024:.2f}MB)"
+                )
 
     title = StringField(
         "Title",

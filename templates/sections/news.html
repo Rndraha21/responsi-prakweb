@@ -12,23 +12,23 @@
   <div class="container-article">
     {% for data in response %}
     <div class="card card-grid">
-      <div style="width: 100%;">
+      <div style="width: 100%">
         <img
           src="{{ data.public_url }}"
           class="card-img-top"
           alt="Picture {{ data.title }}"
-          style="object-fit: cover; height: 200px;"
+          style="object-fit: cover; height: 200px"
         />
       </div>
       <div class="card-body card-grid-inner">
         <div>
-          <span class="badge mb-0" style="background-color: #6c2dc4"
+          <span class="badge mb-2" style="background-color: #6c2dc4"
             >{{ data.game_name }}</span
           >
           <h5 class="card-title mt-0">{{ data.title }}</h5>
         </div>
         <div class="card-text">
-          {{ data.content | safe | truncate(200)}}
+          <div class="content-summary">{{ data.content | safe}}</div>
           <a href="{{ url_for('read_more', id=data.id) }}" class="link"
             >Read more</a
           >

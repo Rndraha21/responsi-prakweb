@@ -19,7 +19,7 @@
         <a class="nav-link active" href="#home">HOME</a>
         <a class="nav-link" href="#news">NEWS</a>
         <a class="nav-link" href="{{ url_for('create_article') }}"
-          >WRITE ARTICLE</a
+          >CREATE ARTICLE</a
         >
         {% if username %} {% if role == "admin" %}
         <a href="{{ url_for('dashboard_admin') }}" class="nav-link"

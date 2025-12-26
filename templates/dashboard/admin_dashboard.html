@@ -1,0 +1,122 @@
+{% extends 'page_template.html' %} {% block title %} Admin Dashboard {% endblock
+%} {% block content %}
+<canvas id="canvas2"></canvas>
+<div class="container-dashboard">
+  <div class="row">
+    <h1>New Post Articles</h1>
+    {% if response %}
+    <div class="col-md-8">
+      {% for data in response %}
+      <div class="card-featured mb-4" data-game="{{ data.game_name }}">
+        <img
+          src="{{ data.public_url }}"
+          class="featured-img"
+          style="height: 500px"
+          alt="{{ data.title }}"
+        />
+        <div class="featured-content">
+          <span class="badge" style="background-color: #9d5aef; font-size: 1rem"
+            >{{ data.game_name }}</span
+          >
+          <h2 class="card-title">{{ data.title }}</h2>
+          <div class="mb-0" style="font-size: 1rem">
+            {{ data.profiles.full_name | truncate(12) }} • {{ data.created_at }}
+          </div>
+          <div class="mt-2">
+            <div class="d-flex align-items-center gap-2 mt-2">
+              <button
+                class="status-btn approve-btn d-flex align-items-center gap-2"
+                data-id="{{ data.id }}"
+                data-value="approved"
+              >
+                <i class="bi bi-check-circle"></i><span>Approve</span>
+              </button>
+
+              <button
+                class="status-btn reject-btn d-flex align-items-center gap-2"
+                data-id="{{ data.id }}"
+                data-value="rejected"
+              >
+                <i class="bi bi-dash-circle"></i><span>Reject</span>
+              </button>
+            </div>
+          </div>
+          <hr />
+          <div class="content content-summary">{{ data.content | safe }}</div>
+        </div>
+      </div>
+
+      <div
+        id="admin-empty-state"
+        class="d-none text-center py-5 shadow-sm rounded-4 bg-dark border border-secondary"
+      >
+        <div class="mb-3">
+          <i
+            class="bi bi-patch-question"
+            style="font-size: 4rem; color: #6c2dc4"
+          ></i>
+        </div>
+        <h4 class="fw-bold text-white">
+          There is no article for this category!
+        </h4>
+        <p class="text-secondary">
+          Have you reviewed all of these game articles or have none of them been
+          submitted yet?
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="col-md-4">
+      <div class="d-none d-md-block position-sticky top-0">
+        <p>Filter by categories</p>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="filter-all" checked />
+          All
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="MOBILE LEGENDS" />
+          Mobile Legends: Bang Bangs
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="LEAGUE OF LEGENDS" />
+          League of Legends
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="PUBG MOBILE" />
+          PUBG Mobile
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="FREE FIRE" />
+          Free Fire
+        </label>
+
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="HONOR OF KINGS" />
+          Honor of Kings
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="EFOOTBALL" />
+          E-Football
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="DOTA2" />
+          DOTA2
+        </label>
+      </div>
+    </div>
+    {% else %}
+    <div
+      class="text-center py-5 shadow-sm rounded-4 bg-dark border border-secondary"
+    >
+      <div class="mb-3">
+        <i class="bi bi-journal-x" style="font-size: 4rem; color: #6c2dc4"></i>
+      </div>
+      <h4 class="fw-bold text-white">No new articles founds!</h4>
+      <p class="text-secondary">
+        There are no articles to review for now. <br />
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -11,7 +11,7 @@ from flask import (
     abort,
     jsonify,
 )
-from models import UserModel, Authentication, Article
+from models import UserModel, Authentication, Article, AdminDashboard, UserDashboard
 from forms import FormSignIn, FormSignUp, FormArticle
 from datetime import timedelta
 from functools import wraps
@@ -89,8 +89,10 @@ def sign_in():
             password = form.password.data
 
             result = Authentication.sign_in_user(email, password)
-            user_role = UserModel().get_role(result["auth"].user.id)
-            role = user_role.data[0]["role"]
+
+            if result["success"]:
+                user_role = UserModel().get_role(result["auth"].user.id)
+                role = user_role.data[0]["role"]
 
             if not result["success"]:
                 flash(result["message"], "danger")
@@ -174,7 +176,7 @@ def index():
         date = arw.format("ddd, DD MMM YYYY", locale="id")
         relatif = arw.humanize(locale="id")
 
-        if diff_day > 7:
+        if diff_day > 1:
             article["created_at"] = f"{date}"
         else:
             article["created_at"] = f"{relatif}"
@@ -193,6 +195,8 @@ def create_article():
     form = FormArticle()
     email = session.get("email")
     username = email.split("@")[0] if email else ""
+
+    role = session.get("role", "guest")
 
     if request.method == "POST" and form.validate_on_submit():
         file = form.thumbnail.data
@@ -227,7 +231,9 @@ def create_article():
             )
 
             if res["success"]:
-                flash("Article successfully created.", "success")
+                flash(
+                    "Article successfully created. Waiting for admin review.", "success"
+                )
                 return redirect(url_for("index"))
             else:
                 flash("Failed to save to database.", "danger")
@@ -238,13 +244,20 @@ def create_article():
             flash("Failed to upload image.", "danger")
             return redirect(url_for("create_article"))
 
-    return render_template("/pages/create_article.html", form=form, username=username)
+    return render_template(
+        "/pages/create_article.html",
+        form=form,
+        username=username,
+        role=role,
+    )
 
 
 @app.route("/read/articles")
 def read_articles():
     email = session.get("email")
     username = email.split("@")[0] if email else ""
+
+    role = session.get("role", "guest")
 
     game_filter = request.args.get("game")
 
@@ -268,6 +281,7 @@ def read_articles():
         username=username,
         latest=response["latest"],
         popular=response["popular"],
+        role=role,
     )
 
 
@@ -275,6 +289,8 @@ def read_articles():
 def read_more(id):
     email = session.get("email")
     username = email.split("@")[0] if email else ""
+
+    role = session.get("role", "guest")
 
     user_id = session.get("user_id")
     article = Article().get_article_by_id(id, user_id)
@@ -285,7 +301,12 @@ def read_more(id):
     arw = arrow.get(article["created_at"])
     article["created_at"] = arw.format("dddd, DD MMMM YYYY", locale="id")
 
-    return render_template("pages/read_more.html", article=article, username=username)
+    return render_template(
+        "pages/read_more.html",
+        article=article,
+        username=username,
+        role=role,
+    )
 
 
 @app.route("/like/article/<id>")
@@ -303,16 +324,55 @@ def dashboard_admin():
     username = email.split("@")[0] if email else ""
     role = session.get("role", "guest")
 
-    return render_template("/pages/read_articles.html", username=username, role=role)
+    response = AdminDashboard().get_all_pending()
+
+    for article in response["data"]:
+        arw = arrow.get(article["created_at"])
+        article["created_at"] = arw.format("dddd, DD MMMM YYYY", locale="id")
+
+    return render_template(
+        "/dashboard/admin_dashboard.html",
+        username=username,
+        role=role,
+        response=response["data"],
+    )
 
 
-@app.route("/user/dashboard")
+@app.route("/delete/article/<id>", methods=["POST"])
+def delete_article(id):
+    user_id = session.get("user_id")
+
+    res = UserDashboard().delete_item(id, user_id)
+    return jsonify(res)
+
+
+@app.route("/admin/update//<id>/<status>", methods=["POST"])
+@admin_required
+def update_status(id, status):
+    res = AdminDashboard().update_status(id, status)
+    return jsonify(res)
+
+
+@app.route("/user/dashboard/")
 @login_required
 def dashboard_user():
     email = session.get("email")
     username = email.split("@")[0] if email else ""
+    role = session.get("role", "guest")
+    user_id = session.get("user_id")
 
-    return render_template("/pages/read_articles.html", username=username)
+    response = UserDashboard().get_all_articles(user_id)
+
+    for article in response["data"]:
+        arw = arrow.get(article["created_at"])
+        article["created_at"] = arw.format("dddd, DD MMMM YYYY", locale="id")
+
+    return render_template(
+        "/dashboard/user_dashboard.html",
+        username=username,
+        role=role,
+        response=response["data"],
+    )
 
 
 # Error handling

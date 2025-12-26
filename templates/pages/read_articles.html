@@ -1,80 +1,7 @@
 {% extends 'page_template.html' %} {% block title %} Articles {% endblock %} {%
 block content %}
 <canvas id="canvas2"></canvas>
-<div class="dropdown">
-  <button
-    class="btn btn-secondary dropdown-toggle"
-    type="button"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
-  >
-    Filter Articles
-  </button>
-  <ul class="dropdown-menu">
-    <li>
-      <a class="dropdown-item" href="{{ url_for('read_articles') }}">ALL</a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='FREEFIRE') }}"
-        >FREE FIRE</a
-      >
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='PUBGM') }}"
-        >PUBGM</a
-      >
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='PUBG') }}"
-        >PUBG</a
-      >
-    </li>
-    <li>
-      <a class="dropdown-item" href="{{ url_for('read_articles', game='CS2') }}"
-        >CS2</a
-      >
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='VALORANT') }}"
-        >VALORANT</a
-      >
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='DOTA2') }}"
-        >DOTA2</a
-      >
-    </li>
-    <li>
-      <a class="dropdown-item" href="{{ url_for('read_articles', game='LOL') }}"
-        >LOL</a
-      >
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='APEX') }}"
-        >APEX</a
-      >
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        href="{{ url_for('read_articles', game='FIFA') }}"
-        >FIFA</a
-      >
-    </li>
-  </ul>
-</div>
+{% include '/components/dropdown.html' %}
 <div class="row mt-4 pb-4">
   {% if latest %}
   <div class="col-md-8">
@@ -83,7 +10,7 @@ block content %}
       {% for data in latest %} {% if loop.first %}
       <div class="card-featured">
         <img src="{{ data.public_url }}" class="featured-img" />
-        <div class="featured-content mt-4">
+        <div class="featured-content">
           <span class="badge" style="background-color: #9d5aef; font-size: 1rem"
             >{{ data.game_name }}</span
           >
@@ -168,7 +95,7 @@ block content %}
     </div>
   </div>
   <div class="col-md-4">
-    <div class="position-sticky top-0">
+    <div class="d-none d-md-block position-sticky top-0">
       <h1 class="title">Most Popular</h1>
       {% for data in popular %}
       <div class="card card-grid mb-4">

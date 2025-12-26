@@ -84,7 +84,9 @@ function copyLink() {
   });
 }
 
-const contentSummary = document.querySelector(".content-summary");
-contentSummary.addEventListener("click", () => {
-  contentSummary.classList.toggle("expanded");
+const contentSummary = document.querySelectorAll(".content-summary");
+contentSummary.forEach((content) => {
+  content.addEventListener("click", () => {
+    content.classList.toggle("expanded");
+  });
 });

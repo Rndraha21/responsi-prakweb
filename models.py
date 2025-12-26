@@ -25,13 +25,13 @@ class Authentication:
                 return {
                     "success": False,
                     "error": "Invalid credentials",
-                    "message": "Email atau password salah.",
+                    "message": "Wrong email or password.",
                 }
 
             return {
                 "success": False,
                 "error": "Authentication error",
-                "message": "Terjadi kesalahan saat login.",
+                "message": "Something went wrong.",
             }
 
     @staticmethod
@@ -213,3 +213,90 @@ class Article:
         total_likes = count_res.count
 
         return {"status": status, "total_likes": total_likes}
+
+
+class AdminDashboard:
+    @staticmethod
+    def get_all_pending():
+        try:
+            res = (
+                supabase.table("articles")
+                .select("*, profiles(full_name)")
+                .eq("status", "pending")
+                .order("created_at", desc=True)
+                .execute()
+            )
+            return {
+                "success": True,
+                "category": "success",
+                "data": res.data,
+            }
+        except Exception as e:
+            print(f"Error detail: {e}")
+            return {
+                "success": False,
+                "category": "danger",
+                "message": str(e),
+            }
+
+    @staticmethod
+    def update_status(article_id, status):
+        try:
+            res = (
+                supabase.table("articles")
+                .update({"status": status})
+                .eq("id", article_id)
+                .execute()
+            )
+
+            return {"success": True}
+        except Exception as e:
+            print(f"Error detail: {e}")
+            return {
+                "success": False,
+                "category": "danger",
+                "message": str(e),
+            }
+
+
+class UserDashboard:
+    @staticmethod
+    def get_all_articles(user_id):
+        try:
+            res = (
+                supabase.table("articles")
+                .select("*")
+                .eq("user_id", user_id)
+                .order("created_at", desc=True)
+                .execute()
+            )
+            return {"success": True, "data": res.data}
+        except Exception as e:
+            print(f"Error detail: {e}")
+            return {"success": False, "message": "Something went wrong"}
+
+    @staticmethod
+    def delete_item(article_id, user_id):
+        try:
+            res_get = (
+                supabase.table("articles")
+                .select("public_url")
+                .eq("id", article_id)
+                .eq("user_id", user_id)
+                .single()
+                .execute()
+            )
+            if not res_get.data:
+                return {"success": False, "message": "Article not found"}
+
+            file_url = res_get.data["public_url"]
+            file_name = file_url.split("/")[-1]
+
+            supabase.storage.from_("thumbnails").remove([file_name])
+
+            supabase.table("articles").delete().eq("id", article_id).execute()
+
+            return {"success": True}
+        except Exception as e:
+            print(f"Failed to delete: {e}")
+            return {"success": False, "message": str(e)}

@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="stylesheet" href="/css/create_article.css" />
     <link rel="stylesheet" href="/css/read_article.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
   </head>
 
   <body>
@@ -54,7 +55,7 @@
                 >ARTICLES</a
               >
               <a class="nav-link" href="{{ url_for('create_article') }}"
-                >WRITE ARTICLE</a
+                >CREATE ARTICLE</a
               >
               {% if username %} {% if role == "admin" %}
               <a href="{{ url_for('dashboard_admin') }}" class="nav-link"
@@ -98,6 +99,7 @@
     <!-- javascript -->
     <script src="/js/create_article.js"></script>
     <script src="/js/read_article.js"></script>
+    <script src="/js/dashboard.js"></script>
 
     <!-- Sweet alert js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

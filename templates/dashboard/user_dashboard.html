@@ -1,0 +1,139 @@
+{% extends 'page_template.html' %} {% block title %} Admin Dashboard {% endblock
+%} {% block content %}
+<canvas id="canvas2"></canvas>
+<div class="container-dashboard">
+  <div class="row">
+    <h1>Your Articles</h1>
+    {% if response %}
+    <div class="col-md-8">
+      {% for data in response %}
+      <div class="card-featured mb-4" data-game="{{ data.game_name }}">
+        <img
+          src="{{ data.public_url }}"
+          class="featured-img"
+          style="height: 500px"
+          alt="{{ data.title }}"
+        />
+        <div class="featured-content">
+          <span class="badge" style="background-color: #9d5aef; font-size: 1rem"
+            >{{ data.game_name }}</span
+          >
+          <h2 class="card-title">{{ data.title }}</h2>
+          <div class="mb-0" style="font-size: 1rem">
+            <span
+              class="badge"
+              style="background: linear-gradient(to right, #6c2dc4, #e649b8)"
+              >You</span
+            >
+            • {{ data.created_at }}
+          </div>
+          {% if data.status == "approved" %}
+          <div class="mt-3">
+            <div class="approve-btn d-inline">
+              <i class="bi bi-check-circle"></i>
+              <span>{{ data.status | capitalize}} </span>
+            </div>
+            <button class="delete-btn" data-id="{{ data.id }}"><i class="bi bi-trash"></i></button>
+          </div>
+          {% elif data.status == "rejected" %}
+          <div class="mt-3">
+            <div class="reject-btn d-inline">
+              <i class="bi bi-dash-circle"></i>
+              <span>{{ data.status | capitalize}}</span>
+            </div>
+            <button class="delete-btn" data-id="{{ data.id }}"><i class="bi bi-trash"></i></button>
+            <span class="d-block mt-2" style="font-size: 12px"
+              >This post cannot be published.</span
+            >
+          </div>
+          {% else %}
+          <div class="mt-3">
+            <div class="pending-btn d-inline">
+              <i class="bi bi-hourglass-bottom"></i>
+              <span>{{ data.status | capitalize}}</span>
+            </div>
+            <button class="delete-btn" data-id="{{ data.id }}"><i class="bi bi-trash"></i></button>
+            <span class="d-block mt-2" style="font-size: 12px"
+              >Waiting for admin review.</span
+            >
+          </div>
+          {% endif %}
+          <hr />
+          <div class="content content-summary">{{ data.content | safe }}</div>
+        </div>
+      </div>
+
+      <div
+        id="admin-empty-state"
+        class="d-none text-center py-5 shadow-sm rounded-4 bg-dark border border-secondary"
+      >
+        <div class="mb-3">
+          <i
+            class="bi bi-patch-question"
+            style="font-size: 4rem; color: #6c2dc4"
+          ></i>
+        </div>
+        <h4 class="fw-bold text-white">
+          There is no article for this category!
+        </h4>
+        <p class="text-secondary">
+          Have you reviewed all of these game articles or have none of them been
+          submitted yet?
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="col-md-4">
+      <div class="d-none d-md-block position-sticky top-0">
+        <p>Filter by categories</p>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="filter-all" checked />
+          All
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="MOBILE LEGENDS" />
+          Mobile Legends: Bang Bangs
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="LEAGUE OF LEGENDS" />
+          League of Legends
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="PUBG MOBILE" />
+          PUBG Mobile
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="FREE FIRE" />
+          Free Fire
+        </label>
+
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="HONOR OF KINGS" />
+          Honor of Kings
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="EFOOTBALL" />
+          E-Football
+        </label>
+        <label class="d-flex align-items-center gap-2">
+          <input type="checkbox" name="game" value="DOTA2" />
+          DOTA2
+        </label>
+      </div>
+    </div>
+    {% else %}
+    <div
+      class="text-center py-5 shadow-sm rounded-4 bg-dark border border-secondary"
+    >
+      <div class="mb-3">
+        <i class="bi bi-journal-x" style="font-size: 4rem; color: #6c2dc4"></i>
+      </div>
+      <h4 class="fw-bold text-white">No new articles founds!</h4>
+      <p class="text-secondary">
+        There are no articles to review for now. <br />
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
