@@ -24,6 +24,7 @@ A dynamic web application built with Python (Flask) and Supabase for the backend
 *   **HTML5:** The standard markup language for creating web pages.
 *   **CSS3:** For styling the application, with separate stylesheets for different components and pages.
 *   **JavaScript (ES6+):** For client-side interactivity and dynamic features.
+*   **Bootstrap 5** For styling
 
 ### Deployment
 *   **Vercel:** The project is configured for easy deployment on the Vercel platform.
@@ -40,8 +41,8 @@ A dynamic web application built with Python (Flask) and Supabase for the backend
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/your-repo-name.git
-    cd your-repo-name
+    git clone https://github.com/Rndraha21/responsi-prakweb.git
+    cd responsi-prakweb
     ```
 
 2.  **Create a virtual environment:**
