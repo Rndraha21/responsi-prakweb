@@ -51,7 +51,8 @@ class FormSignUp(FlaskForm):
 class FormArticle(FlaskForm):
     game_choices = [
         "MOBILE LEGENDS",
-        "LEAGUE OF LEGENDS" "PUBG MOBILE",
+        "LEAGUE OF LEGENDS",
+        "PUBG MOBILE",
         "FREE FIRE",
         "HONOR OF KINGS",
         "EFOOTBALL",
