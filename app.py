@@ -231,10 +231,12 @@ def create_article():
             )
 
             if res["success"]:
-                flash(
-                    "Article successfully created. Waiting for admin review.", "success"
-                )
-                return redirect(url_for("index"))
+                if session.get("role") == "admin":
+                    flash("Article successfully created.", "success")
+                    return redirect(url_for("index"))
+                else:
+                    flash("Article successfully created. Waiting for admin review", "info")
+                    return redirect(url_for("index"))
             else:
                 flash("Failed to save to database.", "danger")
                 return redirect(url_for("create_article"))
