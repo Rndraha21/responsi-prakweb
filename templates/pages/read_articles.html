@@ -59,7 +59,9 @@ block content %}
               >{{ data.game_name }}</span
             >
             <h3 class="card-title">{{ data.title }}</h3>
-            <p>{{ data.content | safe | truncate(300) }}</p>
+            <div class="content-summary-not-expand">
+              {{ data.content | safe }}
+            </div>
             <div class="mb-0" style="font-size: 13px">
               {% if session.get('user_id') == data.user_id %}
               <span
@@ -114,8 +116,10 @@ block content %}
             >
             <h5 class="card-title mb-4 mt-0">{{ data.title }}</h5>
           </div>
-          <div class="card-text">
-            {{ data.content | safe | truncate(200)}}
+          <div>
+            <div class="card-text content-summary-not-expand">
+              {{ data.content | safe}}
+            </div>
             <a href="{{ url_for('read_more', id=data.id) }}" class="link"
               >Read more</a
             >

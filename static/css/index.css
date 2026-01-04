@@ -232,6 +232,14 @@ body {
   overflow: hidden;
 }
 
+.content-summary-not-expand {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .link {
   color: #9d5aef;
   text-decoration: none;
