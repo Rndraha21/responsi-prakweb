@@ -28,7 +28,9 @@
           <h5 class="card-title mt-0">{{ data.title }}</h5>
         </div>
         <div class="card-text">
-          <div class="content-summary">{{ data.content | safe}}</div>
+          <div class="content-summary">
+            {{ data.content | safe}}
+          </div>
           <a href="{{ url_for('read_more', id=data.id) }}" class="link"
             >Read more</a
           >

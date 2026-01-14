@@ -230,6 +230,8 @@ body {
   line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .content-summary-not-expand {
