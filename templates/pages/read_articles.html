@@ -81,6 +81,12 @@ block content %}
           </a>
 
           <div class="mt-2">
+            {% if session.get("user_id") and session.get('user_id') ==
+            data.user_id %}
+            <button class="delete-btn" data-id="{{ data.id }}">
+              <i class="bi bi-trash"></i>
+            </button>
+            {% endif %}
             <button class="btn-like" data-id="{{ data.id }}">
               <i
                 class="bi heart-icon {% if data.is_liked %}bi-heart-fill {% else %} bi-heart {% endif %}"
